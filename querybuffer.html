@@ -61,18 +61,18 @@
 
         // selection symbol used to draw the selected census block points within the buffer polygon
         var symbol = new SimpleMarkerSymbol(
-          SimpleMarkerSymbol.STYLE_CIRCLE,
-          12,
-          new SimpleLineSymbol(
+          SimpleMarkerSymbol.STYLE_CIRCLE,  // Circle
+          12,  // 12 Pixels
+          new SimpleLineSymbol(  // Outline
             SimpleLineSymbol.STYLE_NULL,
-            new Color([247, 34, 101, 0.9]),
+            new Color([247, 34, 101, 0.9]), // RGBA color , 0-225
             1
           ),
-          new Color([65, 104, 232, 0.5])
+          new Color([65, 104, 232, 0.5]) // Circle color
         );
         featureLayer.setSelectionSymbol(symbol);
 
-        //make unselected features invisible
+        // Make unselected features invisible
         var nullSymbol = new SimpleMarkerSymbol().setSize(0);
         featureLayer.setRenderer(new SimpleRenderer(nullSymbol));
 
@@ -88,30 +88,30 @@
         );
         var circle;
 
-        //when the map is clicked create a buffer around the click point of the specified distance.
+        // When the map is clicked create a buffer around the click point of the specified distance.
         map.on("click", function(evt){
-          circle = new Circle({
-            center: evt.mapPoint,
-            geodesic: true,
-            radius: 1,
-            radiusUnit: "esriMiles"
-          });
-          map.graphics.clear();
-          map.infoWindow.hide();
-          var graphic = new Graphic(circle, circleSymb);
-          map.graphics.add(graphic);
+            circle = new Circle({
+                center: evt.mapPoint,
+                geodesic: true,
+                radius: 1,
+                radiusUnit: "esriMiles"
+            });
+            map.graphics.clear();
+            map.infoWindow.hide();
+            var graphic = new Graphic(circle, circleSymb);
+            map.graphics.add(graphic);
 
-          var query = new Query();
-          query.geometry = circle.getExtent();
-          //use a fast bounding box query. will only go to the server if bounding box is outside of the visible map
-          featureLayer.queryFeatures(query, selectInBuffer);
+            var query = new Query();
+            query.geometry = circle.getExtent();
+            // Use a fast bounding box query. will only go to the server if bounding box is outside of the visible map
+            featureLayer.queryFeatures(query, selectInBuffer);
         });
 
         function selectInBuffer(response){
             var feature;
             var features = response.features;
             var inBuffer = [];
-            //filter out features that are not actually in buffer, since we got all points in the buffer's bounding box
+            // Filter out features that are not actually in buffer, since we got all points in the buffer's bounding box
             for (var i = 0; i < features.length; i++) {
                 feature = features[i];
                 if(circle.contains(feature.geometry)){
@@ -120,14 +120,13 @@
             }
             var query = new Query();
             query.objectIds = inBuffer;
-            //use a fast objectIds selection query (should not need to go to the server)
+            // Use a fast objectIds selection query (should not need to go to the server)
             featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function(results){
                 var total = sumPopulation(results, "nbBikes");
-                var r = "";
-                r = "<b>The total number of Bikes within the buffer is <i>" + total + "</i>.</b><br><br>";
+                var info = "<b>The total number of Bikes within the buffer is <i>" + total + "</i>.</b><br><br>";
                 total = sumPopulation(results, "nbEmptyDocks");
-                r += "<b>The total number of Empty Docks within the buffer is <i>" + total + "</i>.</b>";
-                dom.byId("messages").innerHTML = r;
+                info += "<b>The total number of Empty Docks within the buffer is <i>" + total + "</i>.</b>";
+                dom.byId("messages").innerHTML = info;
             });
         }
 
@@ -138,7 +137,7 @@
           }
           return popTotal;
         }
-        
+
       });
     </script>
   </head>
