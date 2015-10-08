@@ -1,0 +1,20 @@
+html, body {
+    background-image: url("../imgs/triangles.png");
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    color: #111111;
+}
+
+#maptime {
+    vertical-align: middle;
+    text-align: center;
+}
+
+#container {
+    margin: 0px auto;
+    display: inline-block;
+}
+
+.bulletpoints {
+    text-align: left;
+}

@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<meta charset=utf-8 />
+		<title>Hello World Map</title>
+		<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+		<link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.10/js/esri/css/esri.css">
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script src="http://js.arcgis.com/3.13compact"></script>		
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<style> #map { width: 100%; height: 100%; } </style>
+	</head>
+
+    <body>
+
+        <div id="map"> </div>
+        
+        <script>
+            
+            require([  
+            "esri/map",
+            "esri/layers/CSVLayer",
+            "esri/symbols/PictureMarkerSymbol",
+            "esri/renderers/SimpleRenderer",
+            "dojo/domReady!"  
+            ],        
+            function(Map, CSVLayer, PictureMarkerSymbol, SimpleRenderer) {
+
+                var map = new Map("map", {  
+                   basemap: "gray",  
+                   center: [-0.122, 51.514], // longitude, latitude  
+                   zoom: 13 
+                 });
+                
+                var layer = new CSVLayer("csv/borisbikes.csv", {
+                  fields: [{name: "mag", type: "String"}, {name: "empty_docks", type: "Number"}]
+                });
+                
+                var logo = new PictureMarkerSymbol("imgs/logo.png", 16, 11); // Define a marker image 
+                var simpleRenderer = new SimpleRenderer(logo); // Define a new renderer
+                layer.setRenderer(simpleRenderer); //Set the simple point renderer to the feature layer
+                
+                map.addLayer(layer);
+
+             });
+            
+        </script>
+    </body>
+</html>

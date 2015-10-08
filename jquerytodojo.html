@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jQuery to Dojo</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <link rel=stylesheet type="text/css" href="dojo&jquery.css">
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="http://js.arcgis.com/3.13/"></script>
+    </head>
+    <body>
+
+        <div class="box red">
+            <p id="one">1</p>
+            <p id="two">2</p>
+            <p id="three">3</p>
+        </div>
+        <div class="box blue">
+            <p class="letter">a</p>
+            <p class="letter">b</p>
+            <p class="letter">c</p>
+        </div>
+
+        <script>
+            // We're using dojo query and dojo NodeList-traverse and NodeList-manipulate
+            require(["dojo/query", "dojo/NodeList-traverse", "dojo/NodeList-manipulate"], function(query){
+                //query methoods - http://dojotoolkit.org/reference-guide/1.10/dojo/query.html
+                var dojoOne = query("#one");
+                var dojoRed = query(".red");
+                var dojoRedAndBlue = query(".red .blue");
+                var dojoQueryChildren = query(".red >"); // This will return children
+                //NodeList-traverse methods
+                var dojoChildren = query(".red").children();
+                var dojoParent = query("#one").parent();
+                var dojoParents = query("#one").parents();
+                var dojoSiblings = query("#one").siblings();
+                var dojoNext =  query("#one").next();
+                // Full list of traversals here: http://dojotoolkit.org/reference-guide/1.10/dojo/NodeList-traverse.html
+                //NodeList-manipulate
+                var dojoInnerHTML = query(".red").innerHTML();
+                var dojoText = query("#one").text();
+                // Full list of manipulations http://dojotoolkit.org/reference-guide/1.10/dojo/NodeList-manipulate.html#dojo-nodelist-manipulate
+                var letters = query(".letter");
+                letters.forEach( function(node){ node.innerHTML = "Something different"; }).style("color", "green");
+                 console.log(
+                    "dojo Variables: \n",
+                    dojoOne,
+                    dojoRed,
+                    dojoRedAndBlue,
+                    dojoChildren,
+                    dojoParent,
+                    dojoParents,
+                    dojoSiblings,
+                    dojoNext,
+                    dojoInnerHTML,
+                    dojoText
+                );
+            });
+        </script>
+        <script>
+            console.log($);
+            var jQueryOne = $("#red");
+            var jQueryRed = $(".red");
+            var jQueryRedAndBlue = $(".red .blue");
+            // https://api.jquery.com/category/manipulation/
+            var jQueryChildren = $(".red").children();
+            var jQueryParent = $("#one").parent();
+            var jQueryParents = $("#one").parents();
+            var jQuerySiblings = $("#one").siblings();
+            var jQueryNext =  $("#one").next();
+            var jQueryInnerHTML = $("#one").html();
+            var jQueryText = $("#one").text();
+            console.log(
+                "jQuery Variables: \n",
+                jQueryOne,
+                jQueryRed,
+                jQueryRedAndBlue,
+                jQueryChildren,
+                jQueryParent,
+                jQueryParents,
+                jQuerySiblings,
+                jQueryNext,
+                jQueryInnerHTML,
+                jQueryText
+            );
+        </script>
+
+
+    </body>
+</html>

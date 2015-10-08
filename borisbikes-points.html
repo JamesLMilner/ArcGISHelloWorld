@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Boris Bikes - Point Data</title>
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+		<script src="http://js.arcgis.com/3.14compact"></script>
+		<style> html, body, #map { width: 100%; height: 100%; padding: 0px; margin: 0px;} </style>
+
+	</head>
+
+    <body>
+
+        <div id="map"> </div>
+
+        <script>
+
+            // Generally we would decouple js and html by putting this in a seperate file
+            var map;
+
+            require([
+	            "esri/map",
+	            "esri/InfoTemplate",
+	            "esri/layers/FeatureLayer",
+	            "esri/symbols/PictureMarkerSymbol",
+	            "esri/renderers/SimpleRenderer",
+	            "dojo/domReady!"
+            ],
+            function(Map, InfoTemplate, FeatureLayer, PictureMarkerSymbol, SimpleRenderer) {
+
+
+                // Define the map
+                map = new Map("map", {
+                   basemap: "gray", // topo, dark-gray, etc
+                   center: [-0.122, 51.514], // longitude, latitude
+                   zoom: 13 // the zoom level
+                 });
+
+                // URL to the Feature Service end point
+                var borisBikes = new FeatureLayer("http://services1.arcgis.com/Q6SkXeZHDxVxhXA4/arcgis/rest/services/boris_bikes/FeatureServer/0",
+                                                  { outFields: ["*"] }
+                                                 );
+                var logo = new PictureMarkerSymbol("imgs/logo.png", 16, 11); // Define a marker image
+                var simpleRenderer = new SimpleRenderer(logo); // Define a new renderer
+                borisBikes.setRenderer(simpleRenderer); //Set the simple point renderer to the feature layer
+
+                // Function to define popup
+                borisBikes.on( "click", function (evt) {
+                    var graphic = evt.graphic; // Get the graphic object and store in a variable
+                    var attributes = evt.graphic.attributes; // Get the feature attributes
+                    var template = new InfoTemplate(); // Define a new popup template (infotemplate)
+                    var templateContent = ""; // Definte an empty string for the content of the popup
+
+                    for(var prop in attributes) {
+                        console.log(prop);
+                            templateContent = templateContent + "<b>" + prop + "</b>" + " : " + String(attributes[prop]) + "<br>";
+
+                    }
+
+                    template.setTitle("Boris Bike Station"); // Set popup title
+                    template.setContent(templateContent); // Set popup content
+                    graphic.setInfoTemplate(template);  // Apply the popup template information to the popup
+                });
+
+                // Add the layer to the map
+                map.addLayer(borisBikes);
+
+            });
+
+        </script>
+    </body>
+</html>
